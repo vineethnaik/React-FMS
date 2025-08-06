@@ -1,5 +1,9 @@
 import React, { useContext, useState } from 'react';
-import { Box, Container, Typography, List, ListItem, ListItemText, Divider, Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions, RadioGroup, FormControlLabel, Radio, Fade, Zoom } from '@mui/material';
+import {
+  Box, Container, Typography, List, ListItem, ListItemText, Divider, Button,
+  TextField, Dialog, DialogContent, DialogActions, RadioGroup,
+  FormControlLabel, Radio, Fade, Zoom
+} from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { useNavigate } from 'react-router-dom';
 import NavBar from './NavBar';
@@ -52,7 +56,6 @@ const PaymentPage = () => {
       setFormError('');
       const newPaymentId = generatePaymentId();
       setPaymentId(newPaymentId);
-      // Send payment to backend
       try {
         await fetch('http://localhost:8080/payment', {
           method: 'POST',
@@ -72,7 +75,6 @@ const PaymentPage = () => {
     } else {
       const newPaymentId = generatePaymentId();
       setPaymentId(newPaymentId);
-      // Send payment to backend
       try {
         await fetch('http://localhost:8080/payment', {
           method: 'POST',
@@ -92,11 +94,12 @@ const PaymentPage = () => {
     }
   };
 
+  // ✅ Changed redirect path here:
   const handleDialogClose = () => {
     setDialogOpen(false);
     clearCart();
     setQrPaid(false);
-    navigate('/');
+    navigate('/home'); // ← Redirects to HomePage.js
   };
 
   const SuccessDialog = ({ open, onClose, isQrPayment }) => (
@@ -228,16 +231,16 @@ const PaymentPage = () => {
             )}
           </>
         )}
-        <Dialog open={dialogOpen} onClose={handleDialogClose}>
+        {dialogOpen && (
           <SuccessDialog 
             open={dialogOpen} 
             onClose={handleDialogClose} 
             isQrPayment={false}
           />
-        </Dialog>
+        )}
       </Container>
     </Box>
   );
 };
 
-export default PaymentPage; 
+export default PaymentPage;
